@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <title>Wicker Maps Dashboard</title>
+    <script>
+      var rectangle;
+      var map;
+      var infoWindow;
+
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 44.5452, lng: -78.5389},
+          scaleControl: true,
+          zoom: 9
+        });
+
+        var bounds = {
+          north: 44.599,
+          south: 44.490,
+          east: -78.443,
+          west: -78.649
+        };
+
+        // Define the rectangle and set its editable property to true.
+        rectangle = new google.maps.Rectangle({
+          bounds: bounds,
+          editable: true,
+          draggable: true
+        });
+
+        rectangle.setMap(map);
+
+        // Add an event listener on the rectangle.
+        rectangle.addListener('bounds_changed', showNewRect);
+
+        // Define an info window on the map.
+        infoWindow = new google.maps.InfoWindow();
+
+
+        //**call to response handler for hash iteration
+        plotCheck(bounds);
+      }
+      // Show the new coordinates for the rectangle in an info window.
+
+      /** @this {google.maps.Rectangle} */
+      function showNewRect(event) {
+        var ne = rectangle.getBounds().getNorthEast();
+        var sw = rectangle.getBounds().getSouthWest();
+
+        var contentString = '<b>Rectangle moved.</b><br>' +
+            'New north-east corner: ' + ne.lat() + ', ' + ne.lng() + '<br>' +
+            'New south-west corner: ' + sw.lat() + ', ' + sw.lng();
+
+        // Set the info window's content and position.
+        infoWindow.setContent(contentString);
+        infoWindow.setPosition(ne);
+
+        infoWindow.open(map);
+      }
+
+
+      //**dummy data for test, will check db in real application
+      coordinateList = [51.5, -0.12, 44.5452] // mock report (bin file of lat longs)
+
+      function plotCheck(range) {
+        var node = document.createElement("LI");
+
+        coordinateList.forEach(function(element) {
+          // debugger;
+          if ((element <= range["north"] && element >= range["south"]) || (element >= range["east"] && element <= range["west"])) {
+            var logNode = document.createTextNode('Flight Log exists within this zone: ' + element);
+
+            node.appendChild(logNode);
+            document.getElementById("myList").appendChild(node);
+          }
+        });
+      }
+
+
+    </script>
+  </head>
+
+  <body>
+    <div id="map" style="width:auto;height:500px;"></div>
+
+    <div class="container">
+      <div class="row">
+        <div id="flight-lists" class="col-sm">
+          <!-- need to add scrollable div -->
+          List of Available Flight Paths for this Map Area
+
+          <ul id="myList">
+
+          </ul>
+        </div>
+        <div id="report-area" class="col-lg">
+          <!-- need to add scrollable div -->
+          Report
+        </div>
+      </div>
+    </div>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDGnO411z1EZhHWhemap_dYADhz3Ri78UE&callback=initMap"async defer></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+  </body>
+</html>
