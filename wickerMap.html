@@ -69,43 +69,28 @@
 
 
       //**dummy data for test, will check db in real application
-      coordinateList = [51.5, -0.12, 44.5452, -78.649] // mock report (bin file of lat longs)
+      coordinateList = [44.5452, -78.5389] // mock report (bin file of lat longs)
 
       function plotCheck(range) {
-        var node = document.createElement("LI");
-
-        coordinateList.forEach(function(element) {
-          if ((element <= range["north"] && element >= range["south"]) || (element >= range["east"] && element <= range["west"])) {
-            var logNode = document.createTextNode('Flight Log exists within this zone: ' + element);
-
-            node.appendChild(logNode);
-            var initialLog = document.getElementById("myList");
-
-            initialLog.append("<li>Flight log exists here</li>")
+        // coordinateList.forEach(function(element) {
+          if ((coordinateList[0] <= range["north"] && coordinateList[0] >= range["south"]) && (coordinateList[1] <= range["east"] && coordinateList[1] >= range["west"])) {
+            var str = JSON.stringify(range)
+            $('#myList').append(`<li>Flight log exists within this zone here: ${str} </li>`);
+          } else {
+            $('#myList').append('<li>No flights within this zone</li>');
           }
-        })
+        // })
+        // debugger
       }
 
       function plotCheckAgain(coords) {
-        var node = document.createElement("LI");
-
-        coordinateList.forEach(function(element) {
-          if ((element <= coords[0] && element <= coords[2]) || (element >= coords[1] && element <= coords[3])) { //north, east, south, west
-            var logNode = document.createTextNode('Flight Log exists within this zone: ' + element);
-
-            node.appendChild(logNode);
-            var followLog = document.getElementById("myList");
-
-            followLog.append("<li>Flight Log exists here</li>")
+        // coordinateList.forEach(function(element) {
+          if ((coordinateList[0] <= coords[0] && coordinateList[0] >= coords[2]) && (coordinateList[1] <= coords[1] && coordinateList[1] >= coords[3])) { //north, east, south, west
+            $('#myList').append(`<li>Flight log exists within this zone here: ${coords} </li>`);          }
+          else {
+            $('#myList').append('<li>No flights within this zone</li>');
           }
-          // else {
-          //   var logNode = document.createTextNode('No flights within this zone');
-          //
-          //   node.appendChild(logNode);
-          //   var followLog = document.getElementById("myList").appendChild(node);
-          //   followLog.appendChild("BR");
-          // }
-        })
+        // })
       }
 
 
