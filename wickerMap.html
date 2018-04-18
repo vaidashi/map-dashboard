@@ -72,25 +72,23 @@
       coordinateList = [44.5452, -78.5389] // mock report (bin file of lat longs)
 
       function plotCheck(range) {
-        // coordinateList.forEach(function(element) {
-          if ((coordinateList[0] <= range["north"] && coordinateList[0] >= range["south"]) && (coordinateList[1] <= range["east"] && coordinateList[1] >= range["west"])) {
-            var str = JSON.stringify(range)
-            $('#myList').append(`<li>Flight log exists within this zone here: ${str} </li>`);
-          } else {
-            $('#myList').append('<li>No flights within this zone</li>');
-          }
-        // })
-        // debugger
+        if ((coordinateList[0] <= range["north"] && coordinateList[0] >= range["south"]) && (coordinateList[1] <= range["east"] && coordinateList[1] >= range["west"])) {
+          var str = JSON.stringify(range)
+          $('#myList').append(`<li>Flight log exists within this zone here: ${str} </li>`);
+        } else {
+          $('#myList').append('<li>No flights within this zone</li>');
+        }
       }
 
       function plotCheckAgain(coords) {
-        // coordinateList.forEach(function(element) {
-          if ((coordinateList[0] <= coords[0] && coordinateList[0] >= coords[2]) && (coordinateList[1] <= coords[1] && coordinateList[1] >= coords[3])) { //north, east, south, west
-            $('#myList').append(`<li>Flight log exists within this zone here: ${coords} </li>`);          }
-          else {
-            $('#myList').append('<li>No flights within this zone</li>');
-          }
-        // })
+        if ((coordinateList[0] <= coords[0] && coordinateList[0] >= coords[2]) && (coordinateList[1] <= coords[1] && coordinateList[1] >= coords[3])) { //north, east, south, west
+          $('#myList').empty();
+          $('#myList').append(`<li>Flight log exists within this zone here: <br /> north:${coords[0]}, south:${coords[2]}, east:${coords[1]}, west:${coords[3]} </li>`);
+        }
+        else {
+          $('#myList').empty();
+          $('#myList').append('<li>No flights within this zone</li>');
+        }
       }
 
 
