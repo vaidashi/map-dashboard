@@ -73,26 +73,66 @@
       //**dummy data for test, will check db in real application
       coordinateList = [4.017, 9.722] // mock report (bin file of lat longs)
 
+      var a = new Array(4);
+      for (i=0; i<4; i++) {
+        a[i] = new Array(1);
+        for(j=0; j< 1; j++) {
+          a[i][j] = '[' + i + ', ' + j + ']';
+        }
+      }
+
+      // for (i=0; i < a.length; i++) {
+      //   for(j=0; j < a[i].length; j++) {
+      //     console.log(a[i][j]);
+      //   }
+      // }
+
       function plotCheck(range) {
-        if ((coordinateList[0] <= range["north"] && coordinateList[0] >= range["south"]) && (coordinateList[1] <= range["east"] && coordinateList[1] >= range["west"])) {
-          var str = JSON.stringify(range)
-          $('#myList').append(`<li>Flight log exists within this zone  <button onclick="reportGenerator(range)">Click Here for the Flight Log Report </button> ${str}</li>`);
-        } else {
-          $('#myList').append('<li>No flights within this zone</li>');
+        for (i=0; i < a.length; i++) {
+          if ((a[0] <= range["north"] && a[0] >= range["south"]) && (a[1] <= range["east"] && a[1] >= range["west"])) {
+            var str = JSON.stringify(range)
+
+            $('#myList').append(`<li>Flight log exists within this zone  <button onclick="reportGenerator(range)">Click Here for the Flight Log Report </button> ${str}</li>`);
+          } else {
+            $('#myList').append('<li>No flights within this zone</li>');
+          }
         }
       }
 
       function plotCheckAgain(coords) {
-        if ((coordinateList[0] <= coords[0] && coordinateList[0] >= coords[2]) && (coordinateList[1] <= coords[1] && coordinateList[1] >= coords[3])) { //north, east, south, west
-          $('#myList').empty();
-          $('p').empty();
-          $('#myList').append(`<li>Flight log exists within this zone  <button onclick="reportGenerator(coordinateList)">Click Here for the Flight Log Report</button> <br />  <br /> North: ${coords[0]} <br /> South: ${coords[2]}<br /> East: ${coords[1]}<br /> West: ${coords[3]}</li>`);
-        }
-        else {
-          $('#myList').empty();
-          $('#myList').append('<li>No flights within this zone</li>');
+        for(i=0; i < a.length; i++) {
+          if ((a[0] <= coords[0] && a[0] >= coords[2]) && (a[1] <= coords[1] && a[1] >= coords[3])) { //north, east, south, west
+            $('#myList').empty();
+            $('p').empty();
+            $('#myList').append(`<li>Flight log exists within this zone  <button onclick="reportGenerator(coords)">Click Here for the Flight Log Report</button> <br />  <br /> North: ${coords[0]} <br /> South: ${coords[2]}<br /> East: ${coords[1]}<br /> West: ${coords[3]}</li>`);
+          } else {
+            $('#myList').empty();
+            $('#myList').append('<li>No flights within this zone</li>');
+          }
         }
       }
+
+
+      // function plotCheck(range) {
+      //   if ((coordinateList[0] <= range["north"] && coordinateList[0] >= range["south"]) && (coordinateList[1] <= range["east"] && coordinateList[1] >= range["west"])) {
+      //     var str = JSON.stringify(range)
+      //     $('#myList').append(`<li>Flight log exists within this zone  <button onclick="reportGenerator(range)">Click Here for the Flight Log Report </button> ${str}</li>`);
+      //   } else {
+      //     $('#myList').append('<li>No flights within this zone</li>');
+      //   }
+      // }
+
+      // function plotCheckAgain(coords) {
+      //   if ((coordinateList[0] <= coords[0] && coordinateList[0] >= coords[2]) && (coordinateList[1] <= coords[1] && coordinateList[1] >= coords[3])) { //north, east, south, west
+      //     $('#myList').empty();
+      //     $('p').empty();
+      //     $('#myList').append(`<li>Flight log exists within this zone  <button onclick="reportGenerator(coordinateList)">Click Here for the Flight Log Report</button> <br />  <br /> North: ${coords[0]} <br /> South: ${coords[2]}<br /> East: ${coords[1]}<br /> West: ${coords[3]}</li>`);
+      //   }
+      //   else {
+      //     $('#myList').empty();
+      //     $('#myList').append('<li>No flights within this zone</li>');
+      //   }
+      // }
 
       function reportGenerator(info) {
         $('p').append(`${info} <br />
