@@ -39,12 +39,12 @@ function initMap() {
 
   //**for kml overlay
   var ctaLayer = new google.maps.KmlLayer({
-    url: 'http://googlemaps.github.io/js-v2-samples/ggeoxml/cta.kml',
+    url: 'https://raw.githubusercontent.com/vaidashi/map-dashboard/master/MAVIC_0103600_01.DAT.kml',
     map: map
   })
 }
-// Show the new coordinates for the rectangle in an info window.
 
+// Show the new coordinates for the rectangle in an info window.
 /** @this {google.maps.Rectangle} */
 function showNewRect(event) {
   var ne = rectangle.getBounds().getNorthEast();
