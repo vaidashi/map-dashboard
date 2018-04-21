@@ -4,11 +4,12 @@
 // https://developers.google.com/maps/documentation/javascript/examples/layer-kml
 
 
-
 var rectangle;
 var map;
 var infoWindow;
 var bounds = {};
+var data1 = [];
+var data2 = [];
 
 
 function initMap() {
@@ -40,17 +41,10 @@ function initMap() {
   // Define an info window on the map.
   infoWindow = new google.maps.InfoWindow();
 
-  //**call to response handler for hash iteration
-  // plotCheck(bounds);
-  //or call to check CSV
+  //call to check CSV
   checkCSV(bounds)
-
-  //**for kml overlay
-  // var ctaLayer = new google.maps.KmlLayer({
-  //   url: 'https://raw.githubusercontent.com/vaidashi/map-dashboard/master/MAVIC_0103600_01.DAT.kml',
-  //   map: map
-  // })
 }
+
 
 // Show the new coordinates for the rectangle in an info window.
 /** @this {google.maps.Rectangle} */
@@ -75,14 +69,6 @@ function showNewRect(event) {
 }
 
 
-//**dummy data for test, will check db in real application
-// coordinateList = [4.017, 9.722] // mock report (bin file of lat longs)
-//
-// var a = new Array();
-// a[0] = [1,2];
-// a[1] = [3.933766,9.834060];
-// a[2] = [3.670675, 11.525954];
-
 function checkCSV(bounds) {
   $.ajax({
     type: "GET",
@@ -92,14 +78,10 @@ function checkCSV(bounds) {
   })
 }
 
-var data1 = [];
-var data2 = [];
 
 function processData(data, bounds) {
   var lines = data.split(/\r\n|\n/);
   var time = [];
-  // var data1 = [];
-  // var data2 = [];
   var headings = lines[0].split(','); // Splice up the first row to get the headings
 
   for (var j=1; j<lines.length; j++) {
@@ -117,19 +99,18 @@ function processData(data, bounds) {
 }
 
 
-//may need to combine this method with the subsequent one
 function plotCheck(range, lat, lon) {
-
+  $('#myList').empty();
+  $('p').empty();
 
   if ((lat <= range["north"] && lat >= range["south"]) && (lon <= range["east"] && lon >= range["west"])) {
     var str = JSON.stringify(range)
 
     $('#myList').append(`<li>Flight log exists within this zone  <button onclick="reportGenerator()">Click Here for the Flight Log Report </button> ${str}</li>`);
   }
-  // else {
-  //   $('#myList').append('<li>No flights within this zone</li>');
-  // }
-
+  else {
+    $('#myList').append('<li>No flights within this zone</li>');
+  }
 }
 
 
@@ -140,38 +121,14 @@ function plotCheckAgain(coords) {
   $('#myList').empty();
   $('p').empty();
 
-
   if ((startLat <= coords[0] && startLat >= coords[2]) && (startLon <= coords[1] && startLon >= coords[3])) { //north, east, south, west
-    // $('#myList').empty();
     $('#myList').append(`<li>Flight log exists within this zone   <button onclick="reportGenerator()">Click Here for the Flight Log Report</button> <br />  <br /> North: ${coords[0]} <br /> South: ${coords[2]}<br /> East: ${coords[1]}<br /> West: ${coords[3]}</li> <br />`);
   } else {
     $('#myList').empty();
-    // $('#myList').append('<li>No flights within this zone</li>');
+    $('#myList').append('<li>No flights within this zone</li>');
   }
-
 }
 
-
-// function plotCheck(range) {
-//   if ((coordinateList[0] <= range["north"] && coordinateList[0] >= range["south"]) && (coordinateList[1] <= range["east"] && coordinateList[1] >= range["west"])) {
-//     var str = JSON.stringify(range)
-//     $('#myList').append(`<li>Flight log exists within this zone  <button onclick="reportGenerator(range)">Click Here for the Flight Log Report </button> ${str}</li>`);
-//   } else {
-//     $('#myList').append('<li>No flights within this zone</li>');
-//   }
-// }
-
-// function plotCheckAgain(coords) {
-//   if ((coordinateList[0] <= coords[0] && coordinateList[0] >= coords[2]) && (coordinateList[1] <= coords[1] && coordinateList[1] >= coords[3])) { //north, east, south, west
-//     $('#myList').empty();
-//     $('p').empty();
-//     $('#myList').append(`<li>Flight log exists within this zone  <button onclick="reportGenerator(coordinateList)">Click Here for the Flight Log Report</button> <br />  <br /> North: ${coords[0]} <br /> South: ${coords[2]}<br /> East: ${coords[1]}<br /> West: ${coords[3]}</li>`);
-//   }
-//   else {
-//     $('#myList').empty();
-//     $('#myList').append('<li>No flights within this zone</li>');
-//   }
-// }
 
 function reportGenerator() {
   // **for kml overlay
@@ -192,8 +149,3 @@ function reportGenerator() {
     Sed eget urna odio. Nullam tristique, lectus nec porta feugiat, sapien sem sollicitudin dolor, at rutrum justo metus eget odio. Morbi porttitor rhoncus lacus, eget aliquam leo. Quisque nec urna condimentum, auctor risus id, scelerisque purus. Sed ullamcorper, nibh sit amet tempor euismod, libero dui vulputate lectus, quis condimentum urna ante id erat. Nunc in neque sit amet urna laoreet consectetur. Morbi scelerisque massa et urna dictum, id vulputate metus condimentum.
     ` );
 }
-
-
-
-//parse csv into array
-//see if first element (2nd and 3rd index) falls within range of selected rectangle
