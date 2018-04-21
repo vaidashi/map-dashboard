@@ -1,7 +1,15 @@
+// https://developers.google.com/kml/documentation/kml_tut
+// https://developers.google.com/maps/documentation/javascript/kml
+// https://developers.google.com/maps/documentation/javascript/kmllayer#overview
+// https://developers.google.com/maps/documentation/javascript/examples/layer-kml
+
+
+
 var rectangle;
 var map;
 var infoWindow;
 var bounds = {};
+
 
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
@@ -32,16 +40,16 @@ function initMap() {
   // Define an info window on the map.
   infoWindow = new google.maps.InfoWindow();
 
-
   //**call to response handler for hash iteration
-  plotCheck(bounds);
-
+  // plotCheck(bounds);
+  //or call to check CSV
+  checkCSV(bounds)
 
   //**for kml overlay
-  var ctaLayer = new google.maps.KmlLayer({
-    url: 'https://raw.githubusercontent.com/vaidashi/map-dashboard/master/MAVIC_0103600_01.DAT.kml',
-    map: map
-  })
+  // var ctaLayer = new google.maps.KmlLayer({
+  //   url: 'https://raw.githubusercontent.com/vaidashi/map-dashboard/master/MAVIC_0103600_01.DAT.kml',
+  //   map: map
+  // })
 }
 
 // Show the new coordinates for the rectangle in an info window.
@@ -68,16 +76,48 @@ function showNewRect(event) {
 
 
 //**dummy data for test, will check db in real application
-coordinateList = [4.017, 9.722] // mock report (bin file of lat longs)
+// coordinateList = [4.017, 9.722] // mock report (bin file of lat longs)
+//
+// var a = new Array();
+// a[0] = [1,2];
+// a[1] = [3.933766,9.834060];
+// a[2] = [3.670675, 11.525954];
 
-var a = new Array();
-a[0] = [1,2];
-a[1] = [3.933766,9.834060];
-a[2] = [3.670675, 11.525954];
+function checkCSV(bounds) {
+  $.ajax({
+    type: "GET",
+    url: "https://raw.githubusercontent.com/vaidashi/map-dashboard/master/MAVIC_0103600_01.DAT_flightpath.csv",
+    dataType: "text",
+    success: function(data) {processData(data, bounds);}
+  })
+}
+
+function processData(data, bounds) {
+  var lines = data.split(/\r\n|\n/);
+  var time = [];
+  var data1 = [];
+  var data2 = [];
+  var headings = lines[0].split(','); // Splice up the first row to get the headings
+
+  for (var j=1; j<lines.length; j++) {
+  var values = lines[j].split(','); // Split up the comma seperated values
+     // We read the key,1st, 2nd and 3rd rows
+     time.push(values[0]); // Read in as string
+     // Recommended to read in as float, since we'll be doing some operations on this later.
+     data1.push(parseFloat(values[1]));
+     data2.push(parseFloat(values[2]));
+  }
+
+  var startLat = data1[0];
+  var startLon = data2[0];
+
+  plotCheck(bounds, startLat, startLon);
+}
 
 
-
-function plotCheck(range) {
+//may need to combine this method with the subsequent one 
+function plotCheck(range, lat, lon) {
+  debugger
   a.forEach(function(element) {
     if ((element[0] <= range["north"] && element[0] >= range["south"]) && (element[1] <= range["east"] && element[1] >= range["west"])) {
       var str = JSON.stringify(range)
@@ -91,6 +131,7 @@ function plotCheck(range) {
 }
 
 function plotCheckAgain(coords) {
+
   $('#myList').empty();
   $('p').empty();
 
@@ -141,3 +182,8 @@ function reportGenerator() {
     Sed eget urna odio. Nullam tristique, lectus nec porta feugiat, sapien sem sollicitudin dolor, at rutrum justo metus eget odio. Morbi porttitor rhoncus lacus, eget aliquam leo. Quisque nec urna condimentum, auctor risus id, scelerisque purus. Sed ullamcorper, nibh sit amet tempor euismod, libero dui vulputate lectus, quis condimentum urna ante id erat. Nunc in neque sit amet urna laoreet consectetur. Morbi scelerisque massa et urna dictum, id vulputate metus condimentum.
     ` );
 }
+
+
+
+//parse csv into array
+//see if first element (2nd and 3rd index) falls within range of selected rectangle
