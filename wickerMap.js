@@ -92,11 +92,14 @@ function checkCSV(bounds) {
   })
 }
 
+var data1 = [];
+var data2 = [];
+
 function processData(data, bounds) {
   var lines = data.split(/\r\n|\n/);
   var time = [];
-  var data1 = [];
-  var data2 = [];
+  // var data1 = [];
+  // var data2 = [];
   var headings = lines[0].split(','); // Splice up the first row to get the headings
 
   for (var j=1; j<lines.length; j++) {
@@ -110,41 +113,42 @@ function processData(data, bounds) {
 
   var startLat = data1[0];
   var startLon = data2[0];
-
   plotCheck(bounds, startLat, startLon);
 }
 
 
-//may need to combine this method with the subsequent one 
+//may need to combine this method with the subsequent one
 function plotCheck(range, lat, lon) {
-  debugger
-  a.forEach(function(element) {
-    if ((element[0] <= range["north"] && element[0] >= range["south"]) && (element[1] <= range["east"] && element[1] >= range["west"])) {
-      var str = JSON.stringify(range)
 
-      $('#myList').append(`<li>Flight log exists within this zone  <button onclick="reportGenerator()">Click Here for the Flight Log Report </button> ${str}</li>`);
-    }
-    // else {
-    //   $('#myList').append('<li>No flights within this zone</li>');
-    // }
-  })
+
+  if ((lat <= range["north"] && lat >= range["south"]) && (lon <= range["east"] && lon >= range["west"])) {
+    var str = JSON.stringify(range)
+
+    $('#myList').append(`<li>Flight log exists within this zone  <button onclick="reportGenerator()">Click Here for the Flight Log Report </button> ${str}</li>`);
+  }
+  // else {
+  //   $('#myList').append('<li>No flights within this zone</li>');
+  // }
+
 }
 
+
 function plotCheckAgain(coords) {
+  var startLat = data1[0];
+  var startLon = data2[0];
 
   $('#myList').empty();
   $('p').empty();
 
-  a.forEach(function(element) {
-    if ((element[0] <= coords[0] && element[0] >= coords[2]) && (element[1] <= coords[1] && element[1] >= coords[3])) { //north, east, south, west
-      // $('#myList').empty();
-      // debugger
-      $('#myList').append(`<li>Flight log exists within this zone   <button onclick="reportGenerator()">Click Here for the Flight Log Report</button> <br />  <br /> North: ${coords[0]} <br /> South: ${coords[2]}<br /> East: ${coords[1]}<br /> West: ${coords[3]}</li> <br />`);
-    } else {
-      $('#myList').empty();
-      // $('#myList').append('<li>No flights within this zone</li>');
-    }
-  })
+
+  if ((startLat <= coords[0] && startLat >= coords[2]) && (startLon <= coords[1] && startLon >= coords[3])) { //north, east, south, west
+    // $('#myList').empty();
+    $('#myList').append(`<li>Flight log exists within this zone   <button onclick="reportGenerator()">Click Here for the Flight Log Report</button> <br />  <br /> North: ${coords[0]} <br /> South: ${coords[2]}<br /> East: ${coords[1]}<br /> West: ${coords[3]}</li> <br />`);
+  } else {
+    $('#myList').empty();
+    // $('#myList').append('<li>No flights within this zone</li>');
+  }
+
 }
 
 
@@ -170,6 +174,12 @@ function plotCheckAgain(coords) {
 // }
 
 function reportGenerator() {
+  // **for kml overlay
+  var ctaLayer = new google.maps.KmlLayer({
+    url: 'https://raw.githubusercontent.com/vaidashi/map-dashboard/master/MAVIC_0103600_01.DAT.kml',
+    map: map
+  })
+
   $('p').empty();
 
   $('p').append(` <br />
