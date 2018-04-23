@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DIUx Wicker Exploitation Report</title>
+  <style>
+    h1 { color: #4384c4; font-size: 3em }
+    h2 { color: #4384c4 }
+    h3 { color: darkgray }
+    .subtitle { color: darkgray; font-size: 1em }
+    .footer { color: gray; font-style: italic }
+    .label { font-weight: bold }
+    .report-section { padding-left: 25px }
+    .tbl_header { font-weight: bold }
+    .column {
+      float: left;
+      width: 50%;
+      height: 50%;
+    }
+    .row:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+    #map {
+        width: 100%;
+        height: 400px;
+      }
+    html, body {
+        height: 100%;
+        margin: 5;
+        padding: 0;
+      }
+  </style>
+</head>
+<body>
+<h1>Drone Exploitation Report</h1>
+<p class="subtitle">Powered by DIUx Wicker</p>
+
+
+<br><br><br>
+<h3>Log Metadata:</h3>
+
+<div class='report-section'>
+
+<table border='0'>
+
+<tr><td class='label'>Aircraft Type:  </td><td>DJI</td></tr>
+
+<tr><td class='label'>Aircraft Subtype:  </td><td></td></tr>
+
+<tr><td class='label'>Firmware:  </td><td></td></tr>
+
+<tr><td class='label'>Firmware Date:  </td><td></td></tr>
+
+<tr><td class='label'>GPS Track Found:  </td><td>
+yes (3864 points)
+</table>
+<br>
+
+</div>
+
+<h3>Home Points:</h3>
+<div class='report-section'>
+<p>Multiple home points found, because the operator updated home location during flight.</p><ul style='list-style-type:circle'>
+<li>Initial:  <a href='https://maps.google.com/maps?q=37.4218182,-122.1142207'>37.4218182, -122.1142207</a></li>
+<li>Update:   <a href='https://maps.google.com/maps?q=37.4218105,-122.1142197'>37.4218105, -122.1142197</a></li>
+<li>Update:   <a href='https://maps.google.com/maps?q=37.4217362,-122.1141894'>37.4217362, -122.1141894</a></li>
+</ul>
+</div>
+<h3>Flight Times:</h3>
+<div class='report-section'>
+<table class='0'
+<tr><td class='label'>Power-on time:  </td><td>Not Available</td></tr>
+<tr><td class='label'>GPS lock time:  </td><td>2018-Jan-11 17:36:36Z</td></tr>
+<tr><td class='label'>Takeoff time:  </td><td>2018-Jan-11 17:37:10Z</td></tr>
+<tr><td class='label'>Land time:  </td><td>2018-Jan-11 17:40:16Z</td></tr>
+<tr><td class='label'>Power-off time:  </td><td>Not Available</td></tr>
+</table>
+<br>
+</div>
+<hr>
+<p class="footer">This report was generated using DIUx Wicker. DoD members can learn more at <a href="rogue.diux.io">rogue.diux.io</a>.</p>
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCiDRTweekSbseQeqdj0cbRc-6q-1e5Vlk&callback=init_all_maps">
+</script>
