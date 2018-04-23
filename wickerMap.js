@@ -10,6 +10,7 @@ var infoWindow;
 var bounds = {};
 var data1 = [];
 var data2 = [];
+var time = [];
 
 
 function initMap() {
@@ -81,7 +82,7 @@ function checkCSV(bounds) {
 
 function processData(data, bounds) {
   var lines = data.split(/\r\n|\n/);
-  var time = [];
+  // var time = [];
   var headings = lines[0].split(','); // Splice up the first row to get the headings
 
   for (var j=1; j<lines.length; j++) {
@@ -121,12 +122,33 @@ function plotCheckAgain(coords) {
   $('#myList').empty();
   $('p').empty();
 
-  if ((startLat <= coords[0] && startLat >= coords[2]) && (startLon <= coords[1] && startLon >= coords[3])) { //north, east, south, west
-    $('#myList').append(`<li>Flight log exists within this zone   <button onclick="reportGenerator()">Click Here for the Flight Log Report</button> <br />  <br /> North: ${coords[0]} <br /> South: ${coords[2]}<br /> East: ${coords[1]}<br /> West: ${coords[3]}</li> <br />`);
+  // if ((startLat <= coords[0] && startLat >= coords[2]) && (startLon <= coords[1] && startLon >= coords[3])) { //north, east, south, west
+  //   $('#myList').append(`<li>Flight log exists within this zone   <button onclick="reportGenerator()">Click Here for the Flight Log Report</button> <br />  <br /> North: ${coords[0]} <br /> South: ${coords[2]}<br /> East: ${coords[1]}<br /> West: ${coords[3]}</li> <br />`);
+  // } else {
+  //   $('#myList').empty();
+  //   $('#myList').append('<li>No flights within this zone</li>');
+  // }
+
+  if ((startLat <= coords[0] && startLat >= coords[2]) && (startLon <= coords[1] && startLon >= coords[3])) {
+    $('#myList').append(`
+      <table>
+        <tr>
+          <th>Date</th>
+          <th>Bounds</th>
+          <th>Report</th>
+        </tr>
+        <tr>
+          <td> ${time[0]} </td>
+          <td>North:${coords[0]} South:${coords[2]} East:${coords[1]} West:${coords[3]} </td>
+          <td><button onclick="reportGenerator()">Click Here</button></td>
+        </tr>
+        </table>
+      `)
   } else {
     $('#myList').empty();
-    $('#myList').append('<li>No flights within this zone</li>');
+    $('#myList').append('<p>No flights within this zone </p>')
   }
+
 }
 
 
@@ -139,7 +161,10 @@ function reportGenerator() {
 
   $('p').empty();
 
-  $('p').load("./MAVIC_0103600_01.DAT.html");
+  $.get("https://raw.githubusercontent.com/vaidashi/map-dashboard/master/MAVIC_0103600_01.DAT.html", function(data) {
+    $("p").html(data);
+  })
+  // $('p').load("./MAVIC_0103600_01.DAT.html");
 
   // $('p').append(` <br />
   //   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam luctus tellus nec rhoncus pretium. Fusce varius urna ante, id vulputate lorem auctor faucibus. Nullam efficitur nunc eget bibendum molestie. Aenean elementum mattis velit, ut molestie sem malesuada luctus. Cras vehicula luctus ipsum vel ornare. Duis ac sapien nec dui fringilla aliquet. Aliquam bibendum, eros at scelerisque eleifend, diam est consectetur nunc, sed dignissim ex sem eget metus.
